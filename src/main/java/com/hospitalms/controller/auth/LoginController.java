@@ -1,6 +1,7 @@
 package com.hospitalms.controller.auth;
 
 import com.hospitalms.core.controller.BaseController;
+import com.hospitalms.validator.LoginValidator;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -13,18 +14,17 @@ public class LoginController extends BaseController{
     @FXML
     private PasswordField passwordField;
 
+    private final LoginValidator loginValidator = new LoginValidator();
+
     @FXML
     public void handleLogin(){
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        if(username == null || username.trim().isEmpty()){
-            showInfo("Validation Error", "Username is required.");
-            return;
-        }
+        String validationError = loginValidator.validate(username, password);
 
-        if(password == null || password.trim().isEmpty()){
-            showInfo("Validation Error", "Password is required.");
+        if(validationError != null){
+            showError("Validation Error", validationError);
             return;
         }
 
