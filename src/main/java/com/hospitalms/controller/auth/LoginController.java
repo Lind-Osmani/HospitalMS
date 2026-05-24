@@ -1,10 +1,12 @@
 package com.hospitalms.controller.auth;
 
 import com.hospitalms.core.controller.BaseController;
+import com.hospitalms.util.SceneUtil;
 import com.hospitalms.validator.LoginValidator;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 public class LoginController extends BaseController{
 
@@ -28,9 +30,13 @@ public class LoginController extends BaseController{
             return;
         }
 
-        showInfo(
-                "Login Test",
-                "Username and password were entered successfully."
+        Stage stage = (Stage) usernameField.getScene().getWindow();
+
+        SceneUtil.changeScene(
+                stage,
+                "/com/hospitalms/fxml/dashboard/dashboard-view.fxml",
+                "Hospital Management System - Dashboard"
         );
+
     }
 }
