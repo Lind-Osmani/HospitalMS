@@ -11,9 +11,9 @@
     <children>
         <Label layoutX="370.0" layoutY="189.0" text="Hospital Management System" />
 
-        <TextField layoutX="325.0" layoutY="220.0" prefWidth="250.0" promptText="Username" />
+        <TextField fx:id="usernameField" layoutX="325.0" layoutY="220.0" prefWidth="250.0" promptText="Username" />
 
-        <PasswordField layoutX="325.0" layoutY="270.0" prefWidth="250.0" promptText="Password" />
+        <PasswordField fx:id="passwordField" layoutX="325.0" layoutY="270.0" prefWidth="250.0" promptText="Password" />
 
         <Button layoutX="427.0" layoutY="300.0" text="Login" onAction="#handleLogin" />
     </children>
