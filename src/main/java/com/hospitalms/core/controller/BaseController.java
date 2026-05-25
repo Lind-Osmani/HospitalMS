@@ -2,7 +2,7 @@ package com.hospitalms.core.controller;
 
 import javafx.scene.control.Alert;
 
-public class BaseController {
+public abstract class BaseController {
 
     protected void showInfo(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

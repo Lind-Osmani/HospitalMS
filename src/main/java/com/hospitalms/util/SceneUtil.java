@@ -4,7 +4,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class SceneUtil {
+public final class SceneUtil {
+
+    private SceneUtil() {
+    }
+
     public static void changeScene(Stage stage, String fxmlPath, String title) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(

@@ -6,16 +6,16 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="com.hospitalms.controller.auth.LoginController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospitalms.controller.auth.LoginController">
 
     <children>
-        <Label layoutX="370.0" layoutY="189.0" text="Hospital Management System" />
+        <Label layoutX="370.0" layoutY="193.0" text="Hospital Management System" />
 
         <TextField fx:id="usernameField" layoutX="325.0" layoutY="220.0" prefWidth="250.0" promptText="Username" />
 
         <PasswordField fx:id="passwordField" layoutX="325.0" layoutY="270.0" prefWidth="250.0" promptText="Password" />
 
-        <Button layoutX="427.0" layoutY="300.0" text="Login" onAction="#handleLogin" />
+        <Button layoutX="427.0" layoutY="311.0" onAction="#handleLogin" text="Login" />
     </children>
 
 </AnchorPane>
