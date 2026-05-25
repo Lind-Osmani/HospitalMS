@@ -44,6 +44,9 @@
                         <Button text="Add Patient"
                                 onAction="#handleAddPatient" />
 
+                        <Button text="Delete Patient"
+                                onAction="#handleDeletePatient" />
+
                         <Button text="Back to Dashboard"
                                 onAction="#handleBackToDashboard" />
                     </children>

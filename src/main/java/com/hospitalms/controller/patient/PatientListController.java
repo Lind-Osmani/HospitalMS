@@ -73,6 +73,24 @@ public class PatientListController extends BaseController {
     }
 
     @FXML
+    private void handleDeletePatient() {
+        PatientResponse selectedPatient = patientTable.getSelectionModel().getSelectedItem();
+
+        if (selectedPatient == null) {
+            showError("Delete Error", "Please select a patient to delete.");
+            return;
+        }
+
+        try {
+            patientService.deletePatient(selectedPatient.getId());
+            showInfo("Success", "Patient deleted successfully.");
+            loadPatients();
+        } catch (Exception e) {
+            showError("Delete Error", e.getMessage());
+        }
+    }
+
+    @FXML
     private void handleBackToDashboard(ActionEvent event) {
         changeScene(
                 event,
