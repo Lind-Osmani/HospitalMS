@@ -1,6 +1,7 @@
 package com.hospitalms.service.impl;
 
 import com.hospitalms.dto.patient.PatientCreateRequest;
+import com.hospitalms.dto.patient.PatientUpdateRequest;
 import com.hospitalms.model.Patient;
 import com.hospitalms.repository.PatientRepository;
 import com.hospitalms.service.PatientService;
@@ -30,6 +31,31 @@ public class PatientServiceImpl implements PatientService {
         );
 
         return patientRepository.save(patient);
+    }
+
+    @Override
+    public Patient updatePatient(Long id, PatientUpdateRequest request) {
+        Patient existingPatient = getPatientById(id);
+
+        Patient updatedPatient = new Patient(
+                existingPatient.getId(),
+                request.getFirstName(),
+                request.getLastName(),
+                request.getGender(),
+                request.getDateOfBirth(),
+                request.getPhone(),
+                request.getEmail(),
+                request.getBloodGroup(),
+                request.getAddress()
+        );
+
+        return patientRepository.update(updatedPatient);
+    }
+
+    @Override
+    public Patient getPatientById(Long id) {
+        return patientRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Patient not found with ID: " + id));
     }
 
     @Override

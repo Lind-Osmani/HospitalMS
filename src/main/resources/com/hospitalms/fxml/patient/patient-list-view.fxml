@@ -44,6 +44,9 @@
                         <Button text="Add Patient"
                                 onAction="#handleAddPatient" />
 
+                        <Button text="Edit Patient"
+                                onAction="#handleEditPatient" />
+
                         <Button text="Delete Patient"
                                 onAction="#handleDeletePatient" />
 
