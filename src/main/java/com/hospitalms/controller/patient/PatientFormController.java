@@ -1,6 +1,10 @@
 package com.hospitalms.controller.patient;
 
 import com.hospitalms.core.controller.BaseController;
+import com.hospitalms.dto.patient.PatientCreateRequest;
+import com.hospitalms.model.Patient;
+import com.hospitalms.service.PatientService;
+import com.hospitalms.service.impl.PatientServiceImpl;
 import com.hospitalms.validator.PatientValidator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,6 +40,7 @@ public class PatientFormController extends BaseController {
     private TextArea addressArea;
 
     private final PatientValidator patientValidator = new PatientValidator();
+    private final PatientService patientService = new PatientServiceImpl();
 
     @FXML
     private void initialize() {
@@ -63,7 +68,27 @@ public class PatientFormController extends BaseController {
             return;
         }
 
-        showInfo("Success", "Patient form is valid. Database saving will be added later.");
+        PatientCreateRequest request = new PatientCreateRequest(
+                firstNameField.getText(),
+                lastNameField.getText(),
+                genderComboBox.getValue(),
+                dateOfBirthPicker.getValue(),
+                phoneField.getText(),
+                emailField.getText(),
+                bloodGroupComboBox.getValue(),
+                addressArea.getText()
+        );
+
+        Patient savedPatient = patientService.createPatient(request);
+
+        showInfo(
+                "Success",
+                "Patient created successfully: "
+                        + savedPatient.getFirstName()
+                        + " "
+                        + savedPatient.getLastName()
+        );
+
         clearForm();
     }
 
