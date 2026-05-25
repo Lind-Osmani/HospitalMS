@@ -1,6 +1,7 @@
 package com.hospitalms.controller.patient;
 
 import com.hospitalms.config.AppFactory;
+import com.hospitalms.config.PatientFormContext;
 import com.hospitalms.core.controller.BaseController;
 import com.hospitalms.dto.patient.PatientResponse;
 import com.hospitalms.mapper.PatientMapper;
@@ -65,6 +66,8 @@ public class PatientListController extends BaseController {
 
     @FXML
     private void handleAddPatient(ActionEvent event) {
+        PatientFormContext.clear();
+
         changeScene(
                 event,
                 "/com/hospitalms/fxml/patient/patient-form-view.fxml",
@@ -119,5 +122,23 @@ public class PatientListController extends BaseController {
                 FXCollections.observableArrayList(patientResponses);
 
         patientTable.setItems(observablePatients);
+    }
+
+    @FXML
+    private void handleEditPatient(ActionEvent event) {
+        PatientResponse selectedPatient = patientTable.getSelectionModel().getSelectedItem();
+
+        if (selectedPatient == null) {
+            showError("Edit Error", "Please select a patient to edit.");
+            return;
+        }
+
+        PatientFormContext.setEditingPatientId(selectedPatient.getId());
+
+        changeScene(
+                event,
+                "/com/hospitalms/fxml/patient/patient-form-view.fxml",
+                "Hospital Management System - Edit Patient"
+        );
     }
 }

@@ -1,8 +1,10 @@
 package com.hospitalms.controller.patient;
 
 import com.hospitalms.config.AppFactory;
+import com.hospitalms.config.PatientFormContext;
 import com.hospitalms.core.controller.BaseController;
 import com.hospitalms.dto.patient.PatientCreateRequest;
+import com.hospitalms.dto.patient.PatientUpdateRequest;
 import com.hospitalms.model.Patient;
 import com.hospitalms.service.PatientService;
 import com.hospitalms.validator.PatientValidator;
@@ -44,14 +46,11 @@ public class PatientFormController extends BaseController {
 
     @FXML
     private void initialize() {
-        genderComboBox.getItems().addAll("Male", "Female", "Other");
+        setupComboBoxes();
 
-        bloodGroupComboBox.getItems().addAll(
-                "A+", "A-",
-                "B+", "B-",
-                "AB+", "AB-",
-                "O+", "O-"
-        );
+        if (PatientFormContext.isEditMode()) {
+            loadPatientForEditing();
+        }
     }
 
     @FXML
@@ -68,6 +67,51 @@ public class PatientFormController extends BaseController {
             return;
         }
 
+        if (PatientFormContext.isEditMode()) {
+            updatePatient(event);
+        } else {
+            createPatient(event);
+        }
+    }
+
+    @FXML
+    private void handleCancel(ActionEvent event) {
+        PatientFormContext.clear();
+
+        changeScene(
+                event,
+                "/com/hospitalms/fxml/patient/patient-list-view.fxml",
+                "Hospital Management System - Patients"
+        );
+    }
+
+    private void setupComboBoxes() {
+        genderComboBox.getItems().addAll("Male", "Female", "Other");
+
+        bloodGroupComboBox.getItems().addAll(
+                "A+", "A-",
+                "B+", "B-",
+                "AB+", "AB-",
+                "O+", "O-"
+        );
+    }
+
+    private void loadPatientForEditing() {
+        Long patientId = PatientFormContext.getEditingPatientId();
+
+        Patient patient = patientService.getPatientById(patientId);
+
+        firstNameField.setText(patient.getFirstName());
+        lastNameField.setText(patient.getLastName());
+        genderComboBox.setValue(patient.getGender());
+        dateOfBirthPicker.setValue(patient.getDateOfBirth());
+        phoneField.setText(patient.getPhone());
+        emailField.setText(patient.getEmail());
+        bloodGroupComboBox.setValue(patient.getBloodGroup());
+        addressArea.setText(patient.getAddress());
+    }
+
+    private void createPatient(ActionEvent event) {
         PatientCreateRequest request = new PatientCreateRequest(
                 firstNameField.getText(),
                 lastNameField.getText(),
@@ -89,15 +133,38 @@ public class PatientFormController extends BaseController {
                         + savedPatient.getLastName()
         );
 
-        changeScene(
-                event,
-                "/com/hospitalms/fxml/patient/patient-list-view.fxml",
-                "Hospital Management System - Patients"
-        );
+        goBackToPatientList(event);
     }
 
-    @FXML
-    private void handleCancel(ActionEvent event) {
+    private void updatePatient(ActionEvent event) {
+        Long patientId = PatientFormContext.getEditingPatientId();
+
+        PatientUpdateRequest request = new PatientUpdateRequest(
+                firstNameField.getText(),
+                lastNameField.getText(),
+                genderComboBox.getValue(),
+                dateOfBirthPicker.getValue(),
+                phoneField.getText(),
+                emailField.getText(),
+                bloodGroupComboBox.getValue(),
+                addressArea.getText()
+        );
+
+        Patient updatedPatient = patientService.updatePatient(patientId, request);
+
+        showInfo(
+                "Success",
+                "Patient updated successfully: "
+                        + updatedPatient.getFirstName()
+                        + " "
+                        + updatedPatient.getLastName()
+        );
+
+        PatientFormContext.clear();
+        goBackToPatientList(event);
+    }
+
+    private void goBackToPatientList(ActionEvent event) {
         changeScene(
                 event,
                 "/com/hospitalms/fxml/patient/patient-list-view.fxml",
