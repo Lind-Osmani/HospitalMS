@@ -1,13 +1,21 @@
 package com.hospitalms.controller.patient;
 
-import com.hospitalms.core.controller.BaseController;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import com.hospitalms.config.AppFactory;
+import com.hospitalms.core.controller.BaseController;
+import com.hospitalms.dto.patient.PatientResponse;
+import com.hospitalms.mapper.PatientMapper;
 import com.hospitalms.model.Patient;
 import com.hospitalms.service.PatientService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+
+import java.util.List;
 
 public class PatientListController extends BaseController {
 
@@ -15,20 +23,44 @@ public class PatientListController extends BaseController {
     private TextField searchField;
 
     @FXML
-    private TableView<?> patientTable;
+    private TableView<PatientResponse> patientTable;
+
+    @FXML
+    private TableColumn<PatientResponse, Long> idColumn;
+
+    @FXML
+    private TableColumn<PatientResponse, String> firstNameColumn;
+
+    @FXML
+    private TableColumn<PatientResponse, String> lastNameColumn;
+
+    @FXML
+    private TableColumn<PatientResponse, String> phoneColumn;
+
+    @FXML
+    private TableColumn<PatientResponse, String> emailColumn;
 
     private final PatientService patientService = AppFactory.getPatientService();
+    private final PatientMapper patientMapper = new PatientMapper();
+
+    @FXML
+    private void initialize() {
+        setupTableColumns();
+        loadPatients();
+    }
 
     @FXML
     private void handleSearch() {
         String keyword = searchField.getText();
 
-        if (keyword == null || keyword.trim().isEmpty()) {
-            showError("Search Error", "Please enter a search keyword.");
-            return;
-        }
+        List<Patient> patients = patientService.searchPatients(keyword);
+        showPatientsInTable(patients);
+    }
 
-        showInfo("Search", "Searching for: " + keyword);
+    @FXML
+    private void handleRefresh() {
+        searchField.clear();
+        loadPatients();
     }
 
     @FXML
@@ -49,5 +81,25 @@ public class PatientListController extends BaseController {
         );
     }
 
+    private void setupTableColumns() {
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
+    }
 
+    private void loadPatients() {
+        List<Patient> patients = patientService.getAllPatients();
+        showPatientsInTable(patients);
+    }
+
+    private void showPatientsInTable(List<Patient> patients) {
+        List<PatientResponse> patientResponses = patientMapper.toResponseList(patients);
+
+        ObservableList<PatientResponse> observablePatients =
+                FXCollections.observableArrayList(patientResponses);
+
+        patientTable.setItems(observablePatients);
+    }
 }
