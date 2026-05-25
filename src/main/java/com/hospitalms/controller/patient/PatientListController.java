@@ -5,6 +5,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import com.hospitalms.config.AppFactory;
+import com.hospitalms.model.Patient;
+import com.hospitalms.service.PatientService;
 
 public class PatientListController extends BaseController {
 
@@ -13,6 +16,8 @@ public class PatientListController extends BaseController {
 
     @FXML
     private TableView<?> patientTable;
+
+    private final PatientService patientService = AppFactory.getPatientService();
 
     @FXML
     private void handleSearch() {
@@ -43,4 +48,6 @@ public class PatientListController extends BaseController {
                 "Hospital Management System - Dashboard"
         );
     }
+
+
 }

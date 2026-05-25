@@ -1,5 +1,6 @@
 package com.hospitalms.controller.patient;
 
+import com.hospitalms.config.AppFactory;
 import com.hospitalms.core.controller.BaseController;
 import com.hospitalms.dto.patient.PatientCreateRequest;
 import com.hospitalms.model.Patient;
@@ -40,7 +41,7 @@ public class PatientFormController extends BaseController {
     private TextArea addressArea;
 
     private final PatientValidator patientValidator = new PatientValidator();
-    private final PatientService patientService = new PatientServiceImpl();
+    private final PatientService patientService = AppFactory.getPatientService();
 
     @FXML
     private void initialize() {
