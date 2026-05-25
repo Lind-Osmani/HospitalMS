@@ -1,13 +1,15 @@
 package com.hospitalms.validator;
 
-public class LoginValidator {
-    public String validate(String username, String password){
+import com.hospitalms.util.ValidationUtil;
 
-        if(username == null || username.trim().isEmpty()){
+public class LoginValidator {
+
+    public String validate(String username, String password) {
+        if (ValidationUtil.isBlank(username)) {
             return "Username is required.";
         }
 
-        if(password == null || password.trim().isEmpty()){
+        if (ValidationUtil.isBlank(password)) {
             return "Password is required.";
         }
 

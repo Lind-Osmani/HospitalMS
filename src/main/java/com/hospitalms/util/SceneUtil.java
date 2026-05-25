@@ -6,6 +6,9 @@ import javafx.stage.Stage;
 
 public final class SceneUtil {
 
+    private static final double DEFAULT_WIDTH = 900;
+    private static final double DEFAULT_HEIGHT = 600;
+
     private SceneUtil() {
     }
 
@@ -15,7 +18,7 @@ public final class SceneUtil {
                     SceneUtil.class.getResource(fxmlPath)
             );
 
-            Scene scene = new Scene(fxmlLoader.load(), 900, 600);
+            Scene scene = new Scene(fxmlLoader.load(), DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
             stage.setTitle(title);
             stage.setScene(scene);
