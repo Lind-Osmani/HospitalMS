@@ -5,7 +5,6 @@ import com.hospitalms.core.controller.BaseController;
 import com.hospitalms.dto.patient.PatientCreateRequest;
 import com.hospitalms.model.Patient;
 import com.hospitalms.service.PatientService;
-import com.hospitalms.service.impl.PatientServiceImpl;
 import com.hospitalms.validator.PatientValidator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -56,7 +55,7 @@ public class PatientFormController extends BaseController {
     }
 
     @FXML
-    private void handleSavePatient() {
+    private void handleSavePatient(ActionEvent event) {
         String validationError = patientValidator.validate(
                 firstNameField.getText(),
                 lastNameField.getText(),
@@ -90,7 +89,11 @@ public class PatientFormController extends BaseController {
                         + savedPatient.getLastName()
         );
 
-        clearForm();
+        changeScene(
+                event,
+                "/com/hospitalms/fxml/patient/patient-list-view.fxml",
+                "Hospital Management System - Patients"
+        );
     }
 
     @FXML
@@ -100,16 +103,5 @@ public class PatientFormController extends BaseController {
                 "/com/hospitalms/fxml/patient/patient-list-view.fxml",
                 "Hospital Management System - Patients"
         );
-    }
-
-    private void clearForm() {
-        firstNameField.clear();
-        lastNameField.clear();
-        genderComboBox.setValue(null);
-        dateOfBirthPicker.setValue(null);
-        phoneField.clear();
-        emailField.clear();
-        bloodGroupComboBox.setValue(null);
-        addressArea.clear();
     }
 }

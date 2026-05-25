@@ -38,6 +38,9 @@
                         <Button text="Search"
                                 onAction="#handleSearch" />
 
+                        <Button text="Refresh"
+                                onAction="#handleRefresh" />
+
                         <Button text="Add Patient"
                                 onAction="#handleAddPatient" />
 
@@ -48,11 +51,25 @@
 
                 <TableView fx:id="patientTable" prefHeight="420.0">
                     <columns>
-                        <TableColumn text="ID" prefWidth="80.0" />
-                        <TableColumn text="First Name" prefWidth="150.0" />
-                        <TableColumn text="Last Name" prefWidth="150.0" />
-                        <TableColumn text="Phone" prefWidth="150.0" />
-                        <TableColumn text="Email" prefWidth="200.0" />
+                        <TableColumn fx:id="idColumn"
+                                     text="ID"
+                                     prefWidth="80.0" />
+
+                        <TableColumn fx:id="firstNameColumn"
+                                     text="First Name"
+                                     prefWidth="150.0" />
+
+                        <TableColumn fx:id="lastNameColumn"
+                                     text="Last Name"
+                                     prefWidth="150.0" />
+
+                        <TableColumn fx:id="phoneColumn"
+                                     text="Phone"
+                                     prefWidth="150.0" />
+
+                        <TableColumn fx:id="emailColumn"
+                                     text="Email"
+                                     prefWidth="220.0" />
                     </columns>
                 </TableView>
             </children>
