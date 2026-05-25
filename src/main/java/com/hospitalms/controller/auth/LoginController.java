@@ -34,7 +34,7 @@ public class LoginController extends BaseController{
 
         SceneUtil.changeScene(
                 stage,
-                "/com.hospitalms/fxml.dashboard/dashboard-view.fxml",
+                "/com/hospitalms/fxml/dashboard/dashboard-view.fxml",
                 "Hospital Management System - Dashboard"
         );
 
