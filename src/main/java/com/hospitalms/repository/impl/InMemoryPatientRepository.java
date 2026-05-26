@@ -74,4 +74,42 @@ public class InMemoryPatientRepository implements PatientRepository {
                 )
                 .toList();
     }
+
+    @Override
+    public boolean existsByPhone(String phone) {
+        return patients.stream()
+                .anyMatch(patient -> patient.getPhone().equals(phone));
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            return false;
+        }
+
+        return patients.stream()
+                .anyMatch(patient -> email.equals(patient.getEmail()));
+    }
+
+    @Override
+    public boolean existsByPhoneAndIdNot(String phone, Long id) {
+        return patients.stream()
+                .anyMatch(patient ->
+                        patient.getPhone().equals(phone)
+                                && !patient.getId().equals(id)
+                );
+    }
+
+    @Override
+    public boolean existsByEmailAndIdNot(String email, Long id) {
+        if (email == null || email.trim().isEmpty()) {
+            return false;
+        }
+
+        return patients.stream()
+                .anyMatch(patient ->
+                        email.equals(patient.getEmail())
+                                && !patient.getId().equals(id)
+                );
+    }
 }
