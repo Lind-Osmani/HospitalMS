@@ -58,8 +58,12 @@ public class DoctorListController extends BaseController{
     }
 
     @FXML
-    private void handleAddDoctor(){
-        showInfo("Add Doctor", "Add Doctor form will be added next.");
+    private void handleAddDoctor(ActionEvent event) {
+        changeScene(
+                event,
+                "/com/hospitalms/fxml/doctor/doctor-form-view.fxml",
+                "Hospital Management System - Add Doctor"
+        );
     }
 
     @FXML
