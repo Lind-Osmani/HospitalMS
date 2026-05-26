@@ -123,17 +123,22 @@ public class PatientFormController extends BaseController {
                 addressArea.getText()
         );
 
-        Patient savedPatient = patientService.createPatient(request);
+        try {
+            Patient savedPatient = patientService.createPatient(request);
 
-        showInfo(
-                "Success",
-                "Patient created successfully: "
-                        + savedPatient.getFirstName()
-                        + " "
-                        + savedPatient.getLastName()
-        );
+            showInfo(
+                    "Success",
+                    "Patient created successfully: "
+                            + savedPatient.getFirstName()
+                            + " "
+                            + savedPatient.getLastName()
+            );
 
-        goBackToPatientList(event);
+            goBackToPatientList(event);
+
+        } catch (Exception e) {
+            showError("Patient Error", e.getMessage());
+        }
     }
 
     private void updatePatient(ActionEvent event) {
@@ -150,18 +155,23 @@ public class PatientFormController extends BaseController {
                 addressArea.getText()
         );
 
-        Patient updatedPatient = patientService.updatePatient(patientId, request);
+        try {
+            Patient updatedPatient = patientService.updatePatient(patientId, request);
 
-        showInfo(
-                "Success",
-                "Patient updated successfully: "
-                        + updatedPatient.getFirstName()
-                        + " "
-                        + updatedPatient.getLastName()
-        );
+            showInfo(
+                    "Success",
+                    "Patient updated successfully: "
+                            + updatedPatient.getFirstName()
+                            + " "
+                            + updatedPatient.getLastName()
+            );
 
-        PatientFormContext.clear();
-        goBackToPatientList(event);
+            PatientFormContext.clear();
+            goBackToPatientList(event);
+
+        } catch (Exception e) {
+            showError("Patient Error", e.getMessage());
+        }
     }
 
     private void goBackToPatientList(ActionEvent event) {

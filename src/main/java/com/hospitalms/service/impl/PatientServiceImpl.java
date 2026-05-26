@@ -2,6 +2,7 @@ package com.hospitalms.service.impl;
 
 import com.hospitalms.dto.patient.PatientCreateRequest;
 import com.hospitalms.dto.patient.PatientUpdateRequest;
+import com.hospitalms.exception.ValidationException;
 import com.hospitalms.model.Patient;
 import com.hospitalms.repository.PatientRepository;
 import com.hospitalms.service.PatientService;
@@ -18,6 +19,8 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Patient createPatient(PatientCreateRequest request) {
+        validateUniquePatientForCreate(request);
+
         Patient patient = new Patient(
                 null,
                 request.getFirstName(),
@@ -36,6 +39,8 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public Patient updatePatient(Long id, PatientUpdateRequest request) {
         Patient existingPatient = getPatientById(id);
+
+        validateUniquePatientForUpdate(id, request);
 
         Patient updatedPatient = new Patient(
                 existingPatient.getId(),
@@ -74,6 +79,26 @@ public class PatientServiceImpl implements PatientService {
 
         if (!deleted) {
             throw new IllegalArgumentException("Patient not found with ID: " + id);
+        }
+    }
+
+    private void validateUniquePatientForCreate(PatientCreateRequest request) {
+        if (patientRepository.existsByPhone(request.getPhone())) {
+            throw new ValidationException("A patient with this phone number already exists.");
+        }
+
+        if (patientRepository.existsByEmail(request.getEmail())) {
+            throw new ValidationException("A patient with this email already exists.");
+        }
+    }
+
+    private void validateUniquePatientForUpdate(Long patientId, PatientUpdateRequest request) {
+        if (patientRepository.existsByPhoneAndIdNot(request.getPhone(), patientId)) {
+            throw new ValidationException("Another patient with this phone number already exists.");
+        }
+
+        if (patientRepository.existsByEmailAndIdNot(request.getEmail(), patientId)) {
+            throw new ValidationException("Another patient with this email already exists.");
         }
     }
 }

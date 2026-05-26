@@ -197,6 +197,108 @@ public class JdbcPatientRepository extends AbstractJdbcRepository implements Pat
         }
     }
 
+    @Override
+    public boolean existsByPhone(String phone) {
+        String sql = "SELECT COUNT(*) FROM patients WHERE phone = ?";
+
+        try (
+                var connection = getConnection();
+                var statement = connection.prepareStatement(sql)
+        ) {
+            statement.setString(1, phone);
+
+            var resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0;
+            }
+
+            return false;
+
+        } catch (Exception e) {
+            throw new DatabaseException("Could not check phone uniqueness.", e);
+        }
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            return false;
+        }
+
+        String sql = "SELECT COUNT(*) FROM patients WHERE email = ?";
+
+        try (
+                var connection = getConnection();
+                var statement = connection.prepareStatement(sql)
+        ) {
+            statement.setString(1, email);
+
+            var resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0;
+            }
+
+            return false;
+
+        } catch (Exception e) {
+            throw new DatabaseException("Could not check email uniqueness.", e);
+        }
+    }
+
+    @Override
+    public boolean existsByPhoneAndIdNot(String phone, Long id) {
+        String sql = "SELECT COUNT(*) FROM patients WHERE phone = ? AND id <> ?";
+
+        try (
+                var connection = getConnection();
+                var statement = connection.prepareStatement(sql)
+        ) {
+            statement.setString(1, phone);
+            statement.setLong(2, id);
+
+            var resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0;
+            }
+
+            return false;
+
+        } catch (Exception e) {
+            throw new DatabaseException("Could not check phone uniqueness for update.", e);
+        }
+    }
+
+    @Override
+    public boolean existsByEmailAndIdNot(String email, Long id) {
+        if (email == null || email.trim().isEmpty()) {
+            return false;
+        }
+
+        String sql = "SELECT COUNT(*) FROM patients WHERE email = ? AND id <> ?";
+
+        try (
+                var connection = getConnection();
+                var statement = connection.prepareStatement(sql)
+        ) {
+            statement.setString(1, email);
+            statement.setLong(2, id);
+
+            var resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0;
+            }
+
+            return false;
+
+        } catch (Exception e) {
+            throw new DatabaseException("Could not check email uniqueness for update.", e);
+        }
+    }
+
     private void fillPatientStatement(PreparedStatement statement, Patient patient) throws Exception {
         statement.setString(1, patient.getFirstName());
         statement.setString(2, patient.getLastName());
@@ -229,4 +331,6 @@ public class JdbcPatientRepository extends AbstractJdbcRepository implements Pat
                 resultSet.getString("address")
         );
     }
+
+
 }
