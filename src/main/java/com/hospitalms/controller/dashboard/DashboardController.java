@@ -16,6 +16,15 @@ public class DashboardController extends BaseController {
     }
 
     @FXML
+    private void handleDoctors(ActionEvent event){
+        changeScene(
+                event,
+                "/com/hospitalms/fxml/doctor/doctor-list-view.fxml",
+                "Hospital Management System - Doctors"
+        );
+    }
+
+    @FXML
     private void handleLogout(ActionEvent event) {
         changeScene(
                 event,
