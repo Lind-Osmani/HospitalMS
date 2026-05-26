@@ -1,43 +1,32 @@
 package com.hospitalms.validator;
 
 import com.hospitalms.util.ValidationUtil;
+import com.hospitalms.core.validator.BasePersonValidator;
 
-public class DoctorValidator{
+public class DoctorValidator extends BasePersonValidator{
     public String validate(String firstName, String lastName, String specialization, String phone, String email){
-        if(ValidationUtil.isBlank(firstName)){
-            return "First name is required.";
+        String firstNameError = validateFirstName(firstName);
+        if (firstNameError != null) {
+            return firstNameError;
         }
 
-        if(!ValidationUtil.hasMinimumLength(firstName, 2)){
-            return "First name must have at least 2 characters.";
+        String lastNameError = validateLastName(lastName);
+        if (lastNameError != null) {
+            return lastNameError;
         }
 
-        if(ValidationUtil.isBlank(lastName)){
-            return "Last name is required.";
-        }
-
-        if(!ValidationUtil.hasMinimumLength(lastName, 2)){
-            return "Last name must have at least 2 characters.";
-        }
-
-        if(ValidationUtil.isBlank(specialization)){
+        if (ValidationUtil.isBlank(specialization)) {
             return "Specialization is required.";
         }
 
-        if(ValidationUtil.isBlank(phone)){
-            return "Phone is required.";
+        String phoneError = validatePhone(phone);
+        if (phoneError != null) {
+            return phoneError;
         }
 
-        if(ValidationUtil.isBlank(email)){
-            return "Email is required.";
-        }
-
-        if (!ValidationUtil.isValidPhone(phone)) {
-            return "Phone number is not valid.";
-        }
-
-        if (!ValidationUtil.isValidEmail(email)) {
-            return "Email must be valid.";
+        String emailError = validateEmail(email);
+        if (emailError != null) {
+            return emailError;
         }
 
         return null;
