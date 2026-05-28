@@ -1,5 +1,6 @@
 package com.hospitalms.controller.doctor;
 
+import com.hospitalms.config.DoctorFormContext;
 import com.hospitalms.config.AppFactory;
 import com.hospitalms.core.controller.BaseController;
 import com.hospitalms.dto.doctor.DoctorResponse;
@@ -68,6 +69,8 @@ public class DoctorListController extends BaseController {
 
     @FXML
     private void handleAddDoctor(ActionEvent event) {
+        DoctorFormContext.clear();
+
         changeScene(
                 event,
                 "/com/hospitalms/fxml/doctor/doctor-form-view.fxml",
@@ -76,13 +79,39 @@ public class DoctorListController extends BaseController {
     }
 
     @FXML
-    private void handleEditDoctor() {
-        showInfo("Edit Doctor", "Edit Doctor functionality will be added later.");
+    private void handleEditDoctor(ActionEvent event) {
+        DoctorResponse selectedDoctor = doctorTable.getSelectionModel().getSelectedItem();
+
+        if (selectedDoctor == null) {
+            showError("Edit Error", "Please select a doctor to edit.");
+            return;
+        }
+
+        DoctorFormContext.setEditingDoctorId(selectedDoctor.getId());
+
+        changeScene(
+                event,
+                "/com/hospitalms/fxml/doctor/doctor-form-view.fxml",
+                "Hospital Management System - Edit Doctor"
+        );
     }
 
     @FXML
     private void handleDeleteDoctor() {
-        showInfo("Delete Doctor", "Delete Doctor functionality will be added later.");
+        DoctorResponse selectedDoctor = doctorTable.getSelectionModel().getSelectedItem();
+
+        if (selectedDoctor == null) {
+            showError("Delete Error", "Please select a doctor to delete.");
+            return;
+        }
+
+        try {
+            doctorService.deleteDoctor(selectedDoctor.getId());
+            showInfo("Success", "Doctor deleted successfully.");
+            loadDoctors();
+        } catch (Exception e) {
+            showError("Delete Error", e.getMessage());
+        }
     }
 
     @FXML

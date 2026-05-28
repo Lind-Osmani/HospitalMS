@@ -206,6 +206,16 @@ public class JdbcDoctorRepository extends AbstractJdbcRepository implements Doct
         return existsByColumn(TABLE_NAME, "email", email);
     }
 
+    @Override
+    public boolean existsByPhoneAndIdNot(String phone, Long id){
+        return existsByColumnAndIdNot(TABLE_NAME, "phone", phone, id);
+    }
+
+    @Override
+    public boolean existsByEmailAndIdNot(String email, Long id){
+        return existsByColumnAndIdNot(TABLE_NAME, "email", email, id);
+    }
+
     private void fillDoctorStatement(PreparedStatement statement, Doctor doctor) throws Exception {
         statement.setString(1, doctor.getFirstName());
         statement.setString(2, doctor.getLastName());
