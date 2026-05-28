@@ -1,6 +1,10 @@
 package com.hospitalms.controller.doctor;
 
+import com.hospitalms.config.AppFactory;
 import com.hospitalms.core.controller.BaseController;
+import com.hospitalms.dto.doctor.DoctorCreateRequest;
+import com.hospitalms.model.Doctor;
+import com.hospitalms.service.DoctorService;
 import com.hospitalms.validator.DoctorValidator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -32,6 +36,7 @@ public class DoctorFormController extends BaseController {
     private TextArea addressArea;
 
     private final DoctorValidator doctorValidator = new DoctorValidator();
+    private final DoctorService doctorService = AppFactory.getDoctorService();
 
     @FXML
     private void initialize() {
@@ -46,7 +51,7 @@ public class DoctorFormController extends BaseController {
     }
 
     @FXML
-    private void handleSaveDoctor() {
+    private void handleSaveDoctor(ActionEvent event) {
         String validationError = doctorValidator.validate(
                 firstNameField.getText(),
                 lastNameField.getText(),
@@ -60,12 +65,36 @@ public class DoctorFormController extends BaseController {
             return;
         }
 
-        showInfo(
-                "Success",
-                "Doctor form is valid. Database saving will be added later."
+        DoctorCreateRequest request = new DoctorCreateRequest(
+                firstNameField.getText(),
+                lastNameField.getText(),
+                specializationField.getText(),
+                departmentComboBox.getValue(),
+                phoneField.getText(),
+                emailField.getText(),
+                addressArea.getText()
         );
 
-        clearForm();
+        try {
+            Doctor savedDoctor = doctorService.createDoctor(request);
+
+            showInfo(
+                    "Success",
+                    "Doctor created successfully: "
+                            + savedDoctor.getFirstName()
+                            + " "
+                            + savedDoctor.getLastName()
+            );
+
+            changeScene(
+                    event,
+                    "/com/hospitalms/fxml/doctor/doctor-list-view.fxml",
+                    "Hospital Management System - Doctors"
+            );
+
+        } catch (Exception e) {
+            showError("Doctor Error", e.getMessage());
+        }
     }
 
     @FXML
@@ -75,15 +104,5 @@ public class DoctorFormController extends BaseController {
                 "/com/hospitalms/fxml/doctor/doctor-list-view.fxml",
                 "Hospital Management System - Doctors"
         );
-    }
-
-    private void clearForm() {
-        firstNameField.clear();
-        lastNameField.clear();
-        specializationField.clear();
-        departmentComboBox.setValue(null);
-        phoneField.clear();
-        emailField.clear();
-        addressArea.clear();
     }
 }

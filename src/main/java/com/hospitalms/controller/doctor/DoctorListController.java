@@ -1,60 +1,69 @@
 package com.hospitalms.controller.doctor;
 
+import com.hospitalms.config.AppFactory;
 import com.hospitalms.core.controller.BaseController;
+import com.hospitalms.dto.doctor.DoctorResponse;
+import com.hospitalms.mapper.DoctorMapper;
+import com.hospitalms.model.Doctor;
+import com.hospitalms.service.DoctorService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.event.ActionEvent;
+import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.util.List;
 
-public class DoctorListController extends BaseController{
+public class DoctorListController extends BaseController {
 
     @FXML
     private TextField searchField;
 
     @FXML
-    private TableView<?> doctorTable;
+    private TableView<DoctorResponse> doctorTable;
 
     @FXML
-    private TableColumn<?, ?> idColumn;
+    private TableColumn<DoctorResponse, Long> idColumn;
 
     @FXML
-    private TableColumn<?, ?> firstNameColumn;
+    private TableColumn<DoctorResponse, String> firstNameColumn;
 
     @FXML
-    private TableColumn<?, ?> lastNameColumn;
+    private TableColumn<DoctorResponse, String> lastNameColumn;
 
     @FXML
-    private TableColumn<?, ?> specializationColumn;
+    private TableColumn<DoctorResponse, String> specializationColumn;
 
     @FXML
-    private TableColumn<?, ?> phoneColumn;
+    private TableColumn<DoctorResponse, String> phoneColumn;
 
     @FXML
-    private TableColumn<?, ?> emailColumn;
+    private TableColumn<DoctorResponse, String> emailColumn;
+
+    private final DoctorService doctorService = AppFactory.getDoctorService();
+    private final DoctorMapper doctorMapper = new DoctorMapper();
 
     @FXML
-    private void initialize(){
-        showInfo("Doctor Module", "Doctor Management screen loaded successfully.");
+    private void initialize() {
+        setupTableColumns();
+        loadDoctors();
     }
 
     @FXML
-    private void handleSearch(){
+    private void handleSearch() {
         String keyword = searchField.getText();
 
-        if(keyword == null || keyword.trim().isEmpty()){
-            showError("Search Error", "Please enter a doctor name or specialization.");
-            return;
-        }
-
-        showInfo("Search", "Searching for doctor: " + keyword);
+        List<Doctor> doctors = doctorService.searchDoctors(keyword);
+        showDoctorsInTable(doctors);
     }
 
     @FXML
-    private void handleRefresh(){
+    private void handleRefresh() {
         searchField.clear();
-        showInfo("Refresh", "Doctor table refresh will be added later.");
+        loadDoctors();
     }
 
     @FXML
@@ -67,7 +76,7 @@ public class DoctorListController extends BaseController{
     }
 
     @FXML
-    private void handleEditDoctor(){
+    private void handleEditDoctor() {
         showInfo("Edit Doctor", "Edit Doctor functionality will be added later.");
     }
 
@@ -83,5 +92,28 @@ public class DoctorListController extends BaseController{
                 "/com/hospitalms/fxml/dashboard/dashboard-view.fxml",
                 "Hospital Management System - Dashboard"
         );
+    }
+
+    private void setupTableColumns() {
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        specializationColumn.setCellValueFactory(new PropertyValueFactory<>("specialization"));
+        phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
+    }
+
+    private void loadDoctors() {
+        List<Doctor> doctors = doctorService.getAllDoctors();
+        showDoctorsInTable(doctors);
+    }
+
+    private void showDoctorsInTable(List<Doctor> doctors) {
+        List<DoctorResponse> doctorResponses = doctorMapper.toResponseList(doctors);
+
+        ObservableList<DoctorResponse> observableDoctors =
+                FXCollections.observableArrayList(doctorResponses);
+
+        doctorTable.setItems(observableDoctors);
     }
 }
