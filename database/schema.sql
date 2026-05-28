@@ -14,3 +14,15 @@ CREATE TABLE IF NOT EXISTS patients (
     address TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
+
+CREATE TABLE IF NOT EXISTS doctors (
+                                       id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                       first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    specialization VARCHAR(150) NOT NULL,
+    department VARCHAR(150),
+    phone VARCHAR(30) NOT NULL UNIQUE,
+    email VARCHAR(150) UNIQUE,
+    address TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
