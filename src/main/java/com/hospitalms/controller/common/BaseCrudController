@@ -1,1 +1,23 @@
+package com.hospitalms.controller.common;
 
+public abstract class BaseCrudController<T> {
+
+    protected abstract void loadData();
+
+    protected abstract void clearForm();
+
+    protected abstract T getFormData();
+
+    protected abstract void fillForm(T entity);
+
+    protected abstract void save();
+
+    protected abstract void update();
+
+    protected abstract void delete();
+
+    protected void refreshPage() {
+        loadData();
+        clearForm();
+    }
+}
