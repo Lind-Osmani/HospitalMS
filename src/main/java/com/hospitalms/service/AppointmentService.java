@@ -17,6 +17,4 @@ public interface AppointmentService {
     List<Appointment> getAllAppointments();
 
     List<Appointment> searchAppointments(String keyword);
-
-    void deleteAppointment(Long id);
 }

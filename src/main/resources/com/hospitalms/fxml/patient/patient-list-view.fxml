@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600.0" prefWidth="1000.0"
+<BorderPane prefHeight="600.0" prefWidth="900.0"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.hospitalms.controller.patient.PatientListController">
@@ -59,7 +59,7 @@
                     <columns>
                         <TableColumn fx:id="idColumn"
                                      text="ID"
-                                     prefWidth="80.0" />
+                                     prefWidth="90.0" />
 
                         <TableColumn fx:id="firstNameColumn"
                                      text="First Name"

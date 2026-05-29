@@ -16,7 +16,6 @@ public class AppointmentMapper implements BaseMapper<Appointment, AppointmentRes
                 appointment.getDoctorName(),
                 appointment.getAppointmentDate().toString(),
                 appointment.getAppointmentTime().toString(),
-                appointment.getReason(),
                 appointment.getStatus().name()
         );
     }
