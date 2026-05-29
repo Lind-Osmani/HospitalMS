@@ -1,9 +1,11 @@
 package com.hospitalms.controller.appointment;
 
 import com.hospitalms.config.AppFactory;
+import com.hospitalms.config.AppointmentFormContext;
 import com.hospitalms.core.controller.BaseController;
 import com.hospitalms.core.ui.ComboBoxItem;
 import com.hospitalms.dto.appointment.AppointmentCreateRequest;
+import com.hospitalms.dto.appointment.AppointmentUpdateRequest;
 import com.hospitalms.model.Appointment;
 import com.hospitalms.model.AppointmentStatus;
 import com.hospitalms.model.Doctor;
@@ -51,6 +53,10 @@ public class AppointmentFormController extends BaseController {
         loadDoctors();
         loadTimes();
         loadStatuses();
+
+        if (AppointmentFormContext.isEditMode()) {
+            loadAppointmentForEditing();
+        }
     }
 
     @FXML
@@ -81,6 +87,26 @@ public class AppointmentFormController extends BaseController {
             return;
         }
 
+        if (AppointmentFormContext.isEditMode()) {
+            updateAppointment(event, patientId, doctorId, appointmentTime, status);
+        } else {
+            createAppointment(event, patientId, doctorId, appointmentTime, status);
+        }
+    }
+
+    @FXML
+    private void handleCancel(ActionEvent event) {
+        AppointmentFormContext.clear();
+        goBackToAppointmentList(event);
+    }
+
+    private void createAppointment(
+            ActionEvent event,
+            Long patientId,
+            Long doctorId,
+            LocalTime appointmentTime,
+            AppointmentStatus status
+    ) {
         AppointmentCreateRequest request = new AppointmentCreateRequest(
                 patientId,
                 doctorId,
@@ -108,9 +134,55 @@ public class AppointmentFormController extends BaseController {
         }
     }
 
-    @FXML
-    private void handleCancel(ActionEvent event) {
-        goBackToAppointmentList(event);
+    private void updateAppointment(
+            ActionEvent event,
+            Long patientId,
+            Long doctorId,
+            LocalTime appointmentTime,
+            AppointmentStatus status
+    ) {
+        Long appointmentId = AppointmentFormContext.getEditingAppointmentId();
+
+        AppointmentUpdateRequest request = new AppointmentUpdateRequest(
+                patientId,
+                doctorId,
+                appointmentDatePicker.getValue(),
+                appointmentTime,
+                reasonArea.getText(),
+                status
+        );
+
+        try {
+            Appointment updatedAppointment = appointmentService.updateAppointment(appointmentId, request);
+
+            showInfo(
+                    "Success",
+                    "Appointment updated successfully for "
+                            + updatedAppointment.getPatientName()
+                            + " with "
+                            + updatedAppointment.getDoctorName()
+            );
+
+            AppointmentFormContext.clear();
+            goBackToAppointmentList(event);
+
+        } catch (Exception e) {
+            showError("Appointment Error", e.getMessage());
+        }
+    }
+
+    private void loadAppointmentForEditing() {
+        Long appointmentId = AppointmentFormContext.getEditingAppointmentId();
+
+        Appointment appointment = appointmentService.getAppointmentById(appointmentId);
+
+        selectComboBoxItemById(patientComboBox, appointment.getPatientId());
+        selectComboBoxItemById(doctorComboBox, appointment.getDoctorId());
+
+        appointmentDatePicker.setValue(appointment.getAppointmentDate());
+        appointmentTimeComboBox.setValue(appointment.getAppointmentTime().toString());
+        statusComboBox.setValue(appointment.getStatus());
+        reasonArea.setText(appointment.getReason());
     }
 
     private void loadPatients() {
@@ -152,6 +224,15 @@ public class AppointmentFormController extends BaseController {
     private void loadStatuses() {
         statusComboBox.getItems().addAll(AppointmentStatus.values());
         statusComboBox.setValue(AppointmentStatus.SCHEDULED);
+    }
+
+    private void selectComboBoxItemById(ComboBox<ComboBoxItem> comboBox, Long id) {
+        for (ComboBoxItem item : comboBox.getItems()) {
+            if (item.getId().equals(id)) {
+                comboBox.setValue(item);
+                return;
+            }
+        }
     }
 
     private void goBackToAppointmentList(ActionEvent event) {

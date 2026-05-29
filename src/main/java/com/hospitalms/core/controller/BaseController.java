@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import javafx.scene.control.TableView;
 
 public abstract class BaseController {
 
@@ -36,5 +37,20 @@ public abstract class BaseController {
     private Stage getStageFromEvent(ActionEvent event) {
         Node source = (Node) event.getSource();
         return (Stage) source.getScene().getWindow();
+    }
+
+    protected <T> T getSelectedTableItem(
+            TableView<T> tableView,
+            String errorTitle,
+            String errorMessage
+    ) {
+        T selectedItem = tableView.getSelectionModel().getSelectedItem();
+
+        if (selectedItem == null) {
+            showError(errorTitle, errorMessage);
+            return null;
+        }
+
+        return selectedItem;
     }
 }
