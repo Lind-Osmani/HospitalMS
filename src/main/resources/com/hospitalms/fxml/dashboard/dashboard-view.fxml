@@ -35,7 +35,8 @@
                         onAction="#handleDoctors"  />
 
                 <Button text="Appointments"
-                        prefWidth="150.0" />
+                        prefWidth="150.0"
+                        onAction="#handleAppointments" />
 
                 <Button text="Billing"
                         prefWidth="150.0" />
