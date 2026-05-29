@@ -15,6 +15,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import com.hospitalms.config.AppointmentFormContext;
 
 import java.util.List;
 
@@ -69,6 +70,7 @@ public class AppointmentListController extends BaseController {
 
     @FXML
     private void handleAddAppointment(ActionEvent event) {
+        AppointmentFormContext.clear();
         AppointmentDetailsContext.clear();
 
         changeScene(
@@ -98,13 +100,44 @@ public class AppointmentListController extends BaseController {
     }
 
     @FXML
-    private void handleEditAppointment() {
-        showInfo("Edit Appointment", "Edit Appointment functionality will be added later.");
+    private void handleEditAppointment(ActionEvent event) {
+        AppointmentResponse selectedAppointment =
+                appointmentTable.getSelectionModel().getSelectedItem();
+
+        if (selectedAppointment == null) {
+            showError("Edit Error", "Please select an appointment to edit.");
+            return;
+        }
+
+        AppointmentFormContext.setEditingAppointmentId(selectedAppointment.getId());
+
+        changeScene(
+                event,
+                "/com/hospitalms/fxml/appointment/appointment-form-view.fxml",
+                "Hospital Management System - Edit Appointment"
+        );
     }
 
     @FXML
     private void handleDeleteAppointment() {
-        showInfo("Delete Appointment", "Delete Appointment functionality will be added later.");
+        AppointmentResponse selectedAppointment =
+                appointmentTable.getSelectionModel().getSelectedItem();
+
+        if (selectedAppointment == null) {
+            showError("Delete Error", "Please select an appointment to delete.");
+            return;
+        }
+
+        try {
+            appointmentService.deleteAppointment(selectedAppointment.getId());
+
+            showInfo("Success", "Appointment deleted successfully.");
+
+            loadAppointments();
+
+        } catch (Exception e) {
+            showError("Delete Error", e.getMessage());
+        }
     }
 
     @FXML

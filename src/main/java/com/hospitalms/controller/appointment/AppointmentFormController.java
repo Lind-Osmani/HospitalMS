@@ -185,6 +185,15 @@ public class AppointmentFormController extends BaseController {
         reasonArea.setText(appointment.getReason());
     }
 
+    private void selectComboBoxItemById(ComboBox<ComboBoxItem> comboBox, Long id) {
+        for (ComboBoxItem item : comboBox.getItems()) {
+            if (item.getId().equals(id)) {
+                comboBox.setValue(item);
+                return;
+            }
+        }
+    }
+
     private void loadPatients() {
         for (Patient patient : patientService.getAllPatients()) {
             patientComboBox.getItems().add(
@@ -224,15 +233,6 @@ public class AppointmentFormController extends BaseController {
     private void loadStatuses() {
         statusComboBox.getItems().addAll(AppointmentStatus.values());
         statusComboBox.setValue(AppointmentStatus.SCHEDULED);
-    }
-
-    private void selectComboBoxItemById(ComboBox<ComboBoxItem> comboBox, Long id) {
-        for (ComboBoxItem item : comboBox.getItems()) {
-            if (item.getId().equals(id)) {
-                comboBox.setValue(item);
-                return;
-            }
-        }
     }
 
     private void goBackToAppointmentList(ActionEvent event) {

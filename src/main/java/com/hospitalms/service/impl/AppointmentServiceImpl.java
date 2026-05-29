@@ -1,10 +1,10 @@
 package com.hospitalms.service.impl;
 
 import com.hospitalms.dto.appointment.AppointmentCreateRequest;
+import com.hospitalms.dto.appointment.AppointmentUpdateRequest;
 import com.hospitalms.model.Appointment;
 import com.hospitalms.repository.AppointmentRepository;
 import com.hospitalms.service.AppointmentService;
-import com.hospitalms.dto.appointment.AppointmentUpdateRequest;
 
 import java.util.List;
 
@@ -66,5 +66,14 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public List<Appointment> searchAppointments(String keyword) {
         return appointmentRepository.search(keyword);
+    }
+
+    @Override
+    public void deleteAppointment(Long id) {
+        boolean deleted = appointmentRepository.deleteById(id);
+
+        if (!deleted) {
+            throw new IllegalArgumentException("Appointment not found with ID: " + id);
+        }
     }
 }
