@@ -6,6 +6,7 @@ import com.hospitalms.dto.appointment.AppointmentResponse;
 import com.hospitalms.mapper.AppointmentMapper;
 import com.hospitalms.model.Appointment;
 import com.hospitalms.service.AppointmentService;
+import com.hospitalms.config.AppointmentFormContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -71,6 +72,8 @@ public class AppointmentListController extends BaseController {
 
     @FXML
     private void handleAddAppointment(ActionEvent event) {
+        AppointmentFormContext.clear();
+
         changeScene(
                 event,
                 "/com/hospitalms/fxml/appointment/appointment-form-view.fxml",
@@ -79,13 +82,45 @@ public class AppointmentListController extends BaseController {
     }
 
     @FXML
-    private void handleEditAppointment() {
-        showInfo("Edit Appointment", "Edit Appointment functionality will be added later.");
+    private void handleEditAppointment(ActionEvent event) {
+        AppointmentResponse selectedAppointment = getSelectedTableItem(
+                appointmentTable,
+                "Edit Error",
+                "Please select an appointment to edit."
+        );
+
+        if (selectedAppointment == null) {
+            return;
+        }
+
+        AppointmentFormContext.setEditingAppointmentId(selectedAppointment.getId());
+
+        changeScene(
+                event,
+                "/com/hospitalms/fxml/appointment/appointment-form-view.fxml",
+                "Hospital Management System - Edit Appointment"
+        );
     }
 
     @FXML
     private void handleDeleteAppointment() {
-        showInfo("Delete Appointment", "Delete Appointment functionality will be added later.");
+        AppointmentResponse selectedAppointment = getSelectedTableItem(
+                appointmentTable,
+                "Delete Error",
+                "Please select an appointment to delete."
+        );
+
+        if (selectedAppointment == null) {
+            return;
+        }
+
+        try {
+            appointmentService.deleteAppointment(selectedAppointment.getId());
+            showInfo("Success", "Appointment deleted successfully.");
+            loadAppointments();
+        } catch (Exception e) {
+            showError("Delete Error", e.getMessage());
+        }
     }
 
     @FXML

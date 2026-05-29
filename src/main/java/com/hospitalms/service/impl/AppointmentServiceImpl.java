@@ -1,6 +1,8 @@
 package com.hospitalms.service.impl;
 
 import com.hospitalms.dto.appointment.AppointmentCreateRequest;
+import com.hospitalms.dto.appointment.AppointmentUpdateRequest;
+import com.hospitalms.exception.ValidationException;
 import com.hospitalms.model.Appointment;
 import com.hospitalms.repository.AppointmentRepository;
 import com.hospitalms.service.AppointmentService;
@@ -17,6 +19,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public Appointment createAppointment(AppointmentCreateRequest request) {
+        validateDoctorAvailabilityForCreate(request);
+
         Appointment appointment = new Appointment(
                 null,
                 request.getPatientId(),
@@ -33,6 +37,33 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    public Appointment updateAppointment(Long id, AppointmentUpdateRequest request) {
+        Appointment existingAppointment = getAppointmentById(id);
+
+        validateDoctorAvailabilityForUpdate(id, request);
+
+        Appointment updatedAppointment = new Appointment(
+                existingAppointment.getId(),
+                request.getPatientId(),
+                request.getDoctorId(),
+                null,
+                null,
+                request.getAppointmentDate(),
+                request.getAppointmentTime(),
+                request.getReason(),
+                request.getStatus()
+        );
+
+        return appointmentRepository.update(updatedAppointment);
+    }
+
+    @Override
+    public Appointment getAppointmentById(Long id) {
+        return appointmentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Appointment not found with ID: " + id));
+    }
+
+    @Override
     public List<Appointment> getAllAppointments() {
         return appointmentRepository.findAll();
     }
@@ -40,5 +71,39 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public List<Appointment> searchAppointments(String keyword) {
         return appointmentRepository.search(keyword);
+    }
+
+    @Override
+    public void deleteAppointment(Long id) {
+        boolean deleted = appointmentRepository.deleteById(id);
+
+        if (!deleted) {
+            throw new IllegalArgumentException("Appointment not found with ID: " + id);
+        }
+    }
+
+    private void validateDoctorAvailabilityForCreate(AppointmentCreateRequest request) {
+        boolean doctorAlreadyBooked = appointmentRepository.existsByDoctorAndDateTime(
+                request.getDoctorId(),
+                request.getAppointmentDate(),
+                request.getAppointmentTime()
+        );
+
+        if (doctorAlreadyBooked) {
+            throw new ValidationException("This doctor already has an appointment at this date and time.");
+        }
+    }
+
+    private void validateDoctorAvailabilityForUpdate(Long appointmentId, AppointmentUpdateRequest request) {
+        boolean doctorAlreadyBooked = appointmentRepository.existsByDoctorAndDateTimeAndIdNot(
+                request.getDoctorId(),
+                request.getAppointmentDate(),
+                request.getAppointmentTime(),
+                appointmentId
+        );
+
+        if (doctorAlreadyBooked) {
+            throw new ValidationException("This doctor already has another appointment at this date and time.");
+        }
     }
 }

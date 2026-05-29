@@ -61,7 +61,41 @@ public class JdbcAppointmentRepository extends AbstractJdbcRepository implements
 
     @Override
     public Appointment update(Appointment appointment) {
-        throw new UnsupportedOperationException("Update appointment will be added later.");
+        String sql = """
+            UPDATE appointments
+            SET patient_id = ?,
+                doctor_id = ?,
+                appointment_date = ?,
+                appointment_time = ?,
+                reason = ?,
+                status = ?
+            WHERE id = ?
+            """;
+
+        try (
+                var connection = getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)
+        ) {
+            statement.setLong(1, appointment.getPatientId());
+            statement.setLong(2, appointment.getDoctorId());
+            statement.setDate(3, Date.valueOf(appointment.getAppointmentDate()));
+            statement.setTime(4, Time.valueOf(appointment.getAppointmentTime()));
+            statement.setString(5, appointment.getReason());
+            statement.setString(6, appointment.getStatus().name());
+            statement.setLong(7, appointment.getId());
+
+            int affectedRows = statement.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new DatabaseException("Appointment not found with ID: " + appointment.getId());
+            }
+
+            return findById(appointment.getId())
+                    .orElseThrow(() -> new DatabaseException("Appointment was updated but could not be loaded."));
+
+        } catch (Exception e) {
+            throw new DatabaseException("Could not update appointment.", e);
+        }
     }
 
     @Override
@@ -138,6 +172,75 @@ public class JdbcAppointmentRepository extends AbstractJdbcRepository implements
 
         } catch (Exception e) {
             throw new DatabaseException("Could not delete appointment.", e);
+        }
+    }
+
+    @Override
+    public boolean existsByDoctorAndDateTime(Long doctorId, java.time.LocalDate date, java.time.LocalTime time) {
+        String sql = """
+            SELECT COUNT(*)
+            FROM appointments
+            WHERE doctor_id = ?
+              AND appointment_date = ?
+              AND appointment_time = ?
+            """;
+
+        try (
+                var connection = getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)
+        ) {
+            statement.setLong(1, doctorId);
+            statement.setDate(2, Date.valueOf(date));
+            statement.setTime(3, Time.valueOf(time));
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0;
+            }
+
+            return false;
+
+        } catch (Exception e) {
+            throw new DatabaseException("Could not check doctor appointment availability.", e);
+        }
+    }
+
+    @Override
+    public boolean existsByDoctorAndDateTimeAndIdNot(
+            Long doctorId,
+            java.time.LocalDate date,
+            java.time.LocalTime time,
+            Long appointmentId
+    ) {
+        String sql = """
+            SELECT COUNT(*)
+            FROM appointments
+            WHERE doctor_id = ?
+              AND appointment_date = ?
+              AND appointment_time = ?
+              AND id <> ?
+            """;
+
+        try (
+                var connection = getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)
+        ) {
+            statement.setLong(1, doctorId);
+            statement.setDate(2, Date.valueOf(date));
+            statement.setTime(3, Time.valueOf(time));
+            statement.setLong(4, appointmentId);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0;
+            }
+
+            return false;
+
+        } catch (Exception e) {
+            throw new DatabaseException("Could not check doctor appointment availability for update.", e);
         }
     }
 
