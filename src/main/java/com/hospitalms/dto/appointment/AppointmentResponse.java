@@ -7,7 +7,6 @@ public class AppointmentResponse {
     private String doctorName;
     private String appointmentDate;
     private String appointmentTime;
-    private String reason;
     private String status;
 
     public AppointmentResponse() {
@@ -19,7 +18,6 @@ public class AppointmentResponse {
             String doctorName,
             String appointmentDate,
             String appointmentTime,
-            String reason,
             String status
     ) {
         this.id = id;
@@ -27,7 +25,6 @@ public class AppointmentResponse {
         this.doctorName = doctorName;
         this.appointmentDate = appointmentDate;
         this.appointmentTime = appointmentTime;
-        this.reason = reason;
         this.status = status;
     }
 
@@ -49,10 +46,6 @@ public class AppointmentResponse {
 
     public String getAppointmentTime() {
         return appointmentTime;
-    }
-
-    public String getReason() {
-        return reason;
     }
 
     public String getStatus() {

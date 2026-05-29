@@ -1,12 +1,12 @@
 package com.hospitalms.controller.appointment;
 
 import com.hospitalms.config.AppFactory;
+import com.hospitalms.config.AppointmentDetailsContext;
 import com.hospitalms.core.controller.BaseController;
 import com.hospitalms.dto.appointment.AppointmentResponse;
 import com.hospitalms.mapper.AppointmentMapper;
 import com.hospitalms.model.Appointment;
 import com.hospitalms.service.AppointmentService;
-import com.hospitalms.config.AppointmentFormContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -42,9 +42,6 @@ public class AppointmentListController extends BaseController {
     private TableColumn<AppointmentResponse, String> timeColumn;
 
     @FXML
-    private TableColumn<AppointmentResponse, String> reasonColumn;
-
-    @FXML
     private TableColumn<AppointmentResponse, String> statusColumn;
 
     private final AppointmentService appointmentService = AppFactory.getAppointmentService();
@@ -72,7 +69,7 @@ public class AppointmentListController extends BaseController {
 
     @FXML
     private void handleAddAppointment(ActionEvent event) {
-        AppointmentFormContext.clear();
+        AppointmentDetailsContext.clear();
 
         changeScene(
                 event,
@@ -82,49 +79,38 @@ public class AppointmentListController extends BaseController {
     }
 
     @FXML
-    private void handleEditAppointment(ActionEvent event) {
-        AppointmentResponse selectedAppointment = getSelectedTableItem(
-                appointmentTable,
-                "Edit Error",
-                "Please select an appointment to edit."
-        );
+    private void handleViewDetails(ActionEvent event) {
+        AppointmentResponse selectedAppointment =
+                appointmentTable.getSelectionModel().getSelectedItem();
 
         if (selectedAppointment == null) {
+            showError("Details Error", "Please select an appointment to view details.");
             return;
         }
 
-        AppointmentFormContext.setEditingAppointmentId(selectedAppointment.getId());
+        AppointmentDetailsContext.setSelectedAppointmentId(selectedAppointment.getId());
 
         changeScene(
                 event,
-                "/com/hospitalms/fxml/appointment/appointment-form-view.fxml",
-                "Hospital Management System - Edit Appointment"
+                "/com/hospitalms/fxml/appointment/appointment-details-view.fxml",
+                "Hospital Management System - Appointment Details"
         );
+    }
+
+    @FXML
+    private void handleEditAppointment() {
+        showInfo("Edit Appointment", "Edit Appointment functionality will be added later.");
     }
 
     @FXML
     private void handleDeleteAppointment() {
-        AppointmentResponse selectedAppointment = getSelectedTableItem(
-                appointmentTable,
-                "Delete Error",
-                "Please select an appointment to delete."
-        );
-
-        if (selectedAppointment == null) {
-            return;
-        }
-
-        try {
-            appointmentService.deleteAppointment(selectedAppointment.getId());
-            showInfo("Success", "Appointment deleted successfully.");
-            loadAppointments();
-        } catch (Exception e) {
-            showError("Delete Error", e.getMessage());
-        }
+        showInfo("Delete Appointment", "Delete Appointment functionality will be added later.");
     }
 
     @FXML
     private void handleBackToDashboard(ActionEvent event) {
+        AppointmentDetailsContext.clear();
+
         changeScene(
                 event,
                 "/com/hospitalms/fxml/dashboard/dashboard-view.fxml",
@@ -138,7 +124,6 @@ public class AppointmentListController extends BaseController {
         doctorNameColumn.setCellValueFactory(new PropertyValueFactory<>("doctorName"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentDate"));
         timeColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentTime"));
-        reasonColumn.setCellValueFactory(new PropertyValueFactory<>("reason"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
     }
 
