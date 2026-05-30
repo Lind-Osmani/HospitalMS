@@ -51,6 +51,8 @@ public class DoctorListController extends BaseController {
 
     @FXML
     private void initialize() {
+        doctorTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
         setupTableColumns();
         loadDoctors();
     }
