@@ -15,6 +15,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import com.hospitalms.core.navigation.PageTitles;
+import com.hospitalms.core.navigation.ViewPaths;
 
 import java.util.List;
 
@@ -70,8 +72,8 @@ public class PatientListController extends BaseController {
 
         changeScene(
                 event,
-                "/com/hospitalms/fxml/patient/patient-form-view.fxml",
-                "Hospital Management System - Add Patient"
+                ViewPaths.PATIENT_FORM,
+                PageTitles.ADD_PATIENT
         );
     }
 
@@ -97,8 +99,8 @@ public class PatientListController extends BaseController {
     private void handleBackToDashboard(ActionEvent event) {
         changeScene(
                 event,
-                "/com/hospitalms/fxml/dashboard/dashboard-view.fxml",
-                "Hospital Management System - Dashboard"
+                ViewPaths.DASHBOARD,
+                PageTitles.DASHBOARD
         );
     }
 
@@ -137,8 +139,8 @@ public class PatientListController extends BaseController {
 
         changeScene(
                 event,
-                "/com/hospitalms/fxml/patient/patient-form-view.fxml",
-                "Hospital Management System - Edit Patient"
+                ViewPaths.PATIENT_FORM,
+                PageTitles.EDIT_PATIENT
         );
     }
 }

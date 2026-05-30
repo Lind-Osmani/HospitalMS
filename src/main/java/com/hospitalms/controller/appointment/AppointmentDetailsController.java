@@ -8,6 +8,8 @@ import com.hospitalms.service.AppointmentService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import com.hospitalms.core.navigation.PageTitles;
+import com.hospitalms.core.navigation.ViewPaths;
 
 public class AppointmentDetailsController extends BaseController {
 
@@ -50,8 +52,8 @@ public class AppointmentDetailsController extends BaseController {
 
         changeScene(
                 event,
-                "/com/hospitalms/fxml/appointment/appointment-list-view.fxml",
-                "Hospital Management System - Appointments"
+                ViewPaths.APPOINTMENT_LIST,
+                PageTitles.APPOINTMENTS
         );
     }
 

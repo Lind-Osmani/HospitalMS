@@ -7,6 +7,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import com.hospitalms.core.navigation.PageTitles;
+import com.hospitalms.core.navigation.ViewPaths;
 
 public class LoginController extends BaseController{
 
@@ -34,8 +36,8 @@ public class LoginController extends BaseController{
 
         SceneUtil.changeScene(
                 stage,
-                "/com/hospitalms/fxml/dashboard/dashboard-view.fxml",
-                "Hospital Management System - Dashboard"
+                ViewPaths.DASHBOARD,
+                PageTitles.DASHBOARD
         );
 
     }

@@ -13,6 +13,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import com.hospitalms.core.navigation.PageTitles;
+import com.hospitalms.core.navigation.ViewPaths;
 
 public class DoctorFormController extends BaseController {
 
@@ -166,8 +168,8 @@ public class DoctorFormController extends BaseController {
     private void goBackToDoctorList(ActionEvent event) {
         changeScene(
                 event,
-                "/com/hospitalms/fxml/doctor/doctor-list-view.fxml",
-                "Hospital Management System - Doctors"
+                ViewPaths.DOCTOR_LIST,
+                PageTitles.DOCTORS
         );
     }
 }
