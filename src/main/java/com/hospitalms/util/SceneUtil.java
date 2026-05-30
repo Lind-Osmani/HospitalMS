@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 
 public final class SceneUtil {
 
-    private static final double DEFAULT_WIDTH = 900;
+    private static final double DEFAULT_WIDTH = 1400;
     private static final double DEFAULT_HEIGHT = 600;
 
     private SceneUtil() {

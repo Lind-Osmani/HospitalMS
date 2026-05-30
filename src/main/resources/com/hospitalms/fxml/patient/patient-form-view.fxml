@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospitalms.controller.patient.PatientFormController">
+<AnchorPane prefHeight="600.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospitalms.controller.patient.PatientFormController">
 
     <children>
         <VBox layoutX="180.0" layoutY="40.0" prefWidth="540.0" spacing="20.0">
