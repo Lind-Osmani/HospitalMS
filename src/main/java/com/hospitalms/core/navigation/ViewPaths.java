@@ -15,7 +15,11 @@ public final class ViewPaths {
     public static final String APPOINTMENT_LIST = "/com/hospitalms/fxml/appointment/appointment-list-view.fxml";
     public static final String APPOINTMENT_FORM = "/com/hospitalms/fxml/appointment/appointment-form-view.fxml";
     public static final String APPOINTMENT_DETAILS = "/com/hospitalms/fxml/appointment/appointment-details-view.fxml";
+    public static final String MEDICAL_RECORD_FORM =
+            "/com/hospitalms/fxml/medicalrecord/medical-record-form-view.fxml";
 
+    public static final String MEDICAL_RECORD_DETAILS =
+            "/com/hospitalms/fxml/medicalrecord/medical-record-details-view.fxml";
     private ViewPaths() {
     }
 }
