@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600.0" prefWidth="900.0"
+<BorderPane prefHeight="750.0" prefWidth="1200.0"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.hospitalms.controller.appointment.AppointmentListController">
@@ -34,7 +34,7 @@
                     <children>
                         <TextField fx:id="searchField"
                                    promptText="Search appointment..."
-                                   prefWidth="220.0" />
+                                   prefWidth="190.0" />
 
                         <Button text="Search"
                                 onAction="#handleSearch" />
@@ -48,6 +48,12 @@
                         <Button text="View Details"
                                 onAction="#handleViewDetails" />
 
+                        <Button text="Add Medical Record"
+                                onAction="#handleAddMedicalRecord" />
+
+                        <Button text="View Medical Record"
+                                onAction="#handleViewMedicalRecord" />
+
                         <Button text="Edit Appointment"
                                 onAction="#handleEditAppointment" />
 
@@ -60,7 +66,8 @@
                 </HBox>
 
                 <TableView fx:id="appointmentTable"
-                           prefHeight="520.0">
+                           prefHeight="520.0"
+                           columnResizePolicy="CONSTRAINED_RESIZE_POLICY">
                     <columns>
                         <TableColumn fx:id="idColumn"
                                      text="ID"
