@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospitalms.controller.auth.LoginController">
+<AnchorPane prefHeight="600.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hospitalms.controller.auth.LoginController">
 
     <children>
         <Label layoutX="370.0" layoutY="193.0" text="Hospital Management System" />

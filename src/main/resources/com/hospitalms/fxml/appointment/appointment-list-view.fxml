@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="750.0" prefWidth="1200.0"
+<BorderPane prefHeight="600.0" prefWidth="1400.0"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.hospitalms.controller.appointment.AppointmentListController">
@@ -66,8 +66,7 @@
                 </HBox>
 
                 <TableView fx:id="appointmentTable"
-                           prefHeight="520.0"
-                           columnResizePolicy="CONSTRAINED_RESIZE_POLICY">
+                           prefHeight="520.0">
                     <columns>
                         <TableColumn fx:id="idColumn"
                                      text="ID"

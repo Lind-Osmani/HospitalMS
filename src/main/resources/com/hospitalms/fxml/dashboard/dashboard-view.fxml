@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<BorderPane prefHeight="600.0" prefWidth="900.0"
+<BorderPane prefHeight="600.0" prefWidth="1400.0"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.hospitalms.controller.dashboard.DashboardController">
