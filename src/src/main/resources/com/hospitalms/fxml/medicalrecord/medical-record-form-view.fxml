@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="750.0" prefWidth="1200.0"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.hospitalms.controller.medicalrecord.MedicalRecordFormController">
+
+    <children>
+        <VBox layoutX="220.0" layoutY="40.0" spacing="22.0" prefWidth="760.0">
+
+            <children>
+                <Label text="Add Medical Record"
+                       style="-fx-font-size: 28px; -fx-font-weight: bold;" />
+
+                <GridPane hgap="20.0" vgap="16.0">
+
+                    <children>
+                        <Label text="Patient:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                        <Label fx:id="patientNameLabel"
+                               GridPane.rowIndex="0"
+                               GridPane.columnIndex="1" />
+
+                        <Label text="Doctor:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                        <Label fx:id="doctorNameLabel"
+                               GridPane.rowIndex="1"
+                               GridPane.columnIndex="1" />
+
+                        <Label text="Diagnosis:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                        <TextArea fx:id="diagnosisArea"
+                                  promptText="Enter diagnosis"
+                                  wrapText="true"
+                                  prefWidth="550.0"
+                                  prefHeight="90.0"
+                                  GridPane.rowIndex="2"
+                                  GridPane.columnIndex="1" />
+
+                        <Label text="Treatment:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                        <TextArea fx:id="treatmentArea"
+                                  promptText="Enter treatment"
+                                  wrapText="true"
+                                  prefWidth="550.0"
+                                  prefHeight="90.0"
+                                  GridPane.rowIndex="3"
+                                  GridPane.columnIndex="1" />
+
+                        <Label text="Prescription:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+                        <TextArea fx:id="prescriptionArea"
+                                  promptText="Enter prescription"
+                                  wrapText="true"
+                                  prefWidth="550.0"
+                                  prefHeight="90.0"
+                                  GridPane.rowIndex="4"
+                                  GridPane.columnIndex="1" />
+
+                        <Label text="Notes:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+                        <TextArea fx:id="notesArea"
+                                  promptText="Enter notes"
+                                  wrapText="true"
+                                  prefWidth="550.0"
+                                  prefHeight="90.0"
+                                  GridPane.rowIndex="5"
+                                  GridPane.columnIndex="1" />
+                    </children>
+
+                </GridPane>
+
+                <HBox spacing="15.0">
+                    <children>
+                        <Button text="Save Medical Record"
+                                prefWidth="180.0"
+                                onAction="#handleSaveMedicalRecord" />
+
+                        <Button text="Cancel"
+                                prefWidth="100.0"
+                                onAction="#handleCancel" />
+                    </children>
+                </HBox>
+            </children>
+
+        </VBox>
+    </children>
+
+</AnchorPane>
