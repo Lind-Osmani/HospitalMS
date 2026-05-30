@@ -183,6 +183,10 @@ public class AppointmentFormController extends BaseController {
         appointmentTimeComboBox.setValue(appointment.getAppointmentTime().toString());
         statusComboBox.setValue(appointment.getStatus());
         reasonArea.setText(appointment.getReason());
+
+        if (appointment.getStatus().isFinalStatus()) {
+            statusComboBox.setDisable(true);
+        }
     }
 
     private void selectComboBoxItemById(ComboBox<ComboBoxItem> comboBox, Long id) {
@@ -232,7 +236,13 @@ public class AppointmentFormController extends BaseController {
 
     private void loadStatuses() {
         statusComboBox.getItems().addAll(AppointmentStatus.values());
-        statusComboBox.setValue(AppointmentStatus.SCHEDULED);
+
+        if (AppointmentFormContext.isEditMode()) {
+            statusComboBox.setDisable(false);
+        } else {
+            statusComboBox.setValue(AppointmentStatus.SCHEDULED);
+            statusComboBox.setDisable(true);
+        }
     }
 
     private void goBackToAppointmentList(ActionEvent event) {
