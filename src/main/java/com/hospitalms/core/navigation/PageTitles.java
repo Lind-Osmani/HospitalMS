@@ -20,6 +20,10 @@ public final class PageTitles {
     public static final String EDIT_APPOINTMENT = APP_NAME + " - Edit Appointment";
     public static final String APPOINTMENT_DETAILS = APP_NAME + " - Appointment Details";
 
+    public static final String ADD_MEDICAL_RECORD = APP_NAME + " - Add Medical Record";
+
+    public static final String MEDICAL_RECORD_DETAILS = APP_NAME + " - Medical Record Details";
+
     private PageTitles() {
     }
 }
