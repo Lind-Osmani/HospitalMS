@@ -2,11 +2,17 @@ package com.hospitalms.controller.appointment;
 
 import com.hospitalms.config.AppFactory;
 import com.hospitalms.config.AppointmentDetailsContext;
+import com.hospitalms.config.AppointmentFormContext;
+import com.hospitalms.config.MedicalRecordContext;
 import com.hospitalms.core.controller.BaseController;
+import com.hospitalms.core.navigation.PageTitles;
+import com.hospitalms.core.navigation.ViewPaths;
 import com.hospitalms.dto.appointment.AppointmentResponse;
 import com.hospitalms.mapper.AppointmentMapper;
 import com.hospitalms.model.Appointment;
+import com.hospitalms.model.AppointmentStatus;
 import com.hospitalms.service.AppointmentService;
+import com.hospitalms.service.MedicalRecordService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,9 +21,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import com.hospitalms.config.AppointmentFormContext;
-import com.hospitalms.core.navigation.PageTitles;
-import com.hospitalms.core.navigation.ViewPaths;
 
 import java.util.List;
 
@@ -48,6 +51,7 @@ public class AppointmentListController extends BaseController {
     private TableColumn<AppointmentResponse, String> statusColumn;
 
     private final AppointmentService appointmentService = AppFactory.getAppointmentService();
+    private final MedicalRecordService medicalRecordService = AppFactory.getMedicalRecordService();
     private final AppointmentMapper appointmentMapper = new AppointmentMapper();
 
     @FXML
@@ -74,6 +78,7 @@ public class AppointmentListController extends BaseController {
     private void handleAddAppointment(ActionEvent event) {
         AppointmentFormContext.clear();
         AppointmentDetailsContext.clear();
+        MedicalRecordContext.clear();
 
         changeScene(
                 event,
@@ -84,8 +89,7 @@ public class AppointmentListController extends BaseController {
 
     @FXML
     private void handleViewDetails(ActionEvent event) {
-        AppointmentResponse selectedAppointment =
-                appointmentTable.getSelectionModel().getSelectedItem();
+        AppointmentResponse selectedAppointment = getSelectedAppointment();
 
         if (selectedAppointment == null) {
             showError("Details Error", "Please select an appointment to view details.");
@@ -102,9 +106,70 @@ public class AppointmentListController extends BaseController {
     }
 
     @FXML
+    private void handleAddMedicalRecord(ActionEvent event) {
+        AppointmentResponse selectedAppointment = getSelectedAppointment();
+
+        if (selectedAppointment == null) {
+            showError("Medical Record Error", "Please select an appointment first.");
+            return;
+        }
+
+        Appointment appointment = appointmentService.getAppointmentById(selectedAppointment.getId());
+
+        if (appointment.getStatus() != AppointmentStatus.COMPLETED) {
+            showError(
+                    "Medical Record Error",
+                    "Only completed appointments can have a medical record."
+            );
+            return;
+        }
+
+        if (medicalRecordService.hasMedicalRecord(appointment.getId())) {
+            showError(
+                    "Medical Record Error",
+                    "This appointment already has a medical record."
+            );
+            return;
+        }
+
+        MedicalRecordContext.setSelectedAppointmentId(appointment.getId());
+
+        changeScene(
+                event,
+                ViewPaths.MEDICAL_RECORD_FORM,
+                PageTitles.ADD_MEDICAL_RECORD
+        );
+    }
+
+    @FXML
+    private void handleViewMedicalRecord(ActionEvent event) {
+        AppointmentResponse selectedAppointment = getSelectedAppointment();
+
+        if (selectedAppointment == null) {
+            showError("Medical Record Error", "Please select an appointment first.");
+            return;
+        }
+
+        if (!medicalRecordService.hasMedicalRecord(selectedAppointment.getId())) {
+            showError(
+                    "Medical Record Error",
+                    "This appointment does not have a medical record yet."
+            );
+            return;
+        }
+
+        MedicalRecordContext.setSelectedAppointmentId(selectedAppointment.getId());
+
+        changeScene(
+                event,
+                ViewPaths.MEDICAL_RECORD_DETAILS,
+                PageTitles.MEDICAL_RECORD_DETAILS
+        );
+    }
+
+    @FXML
     private void handleEditAppointment(ActionEvent event) {
-        AppointmentResponse selectedAppointment =
-                appointmentTable.getSelectionModel().getSelectedItem();
+        AppointmentResponse selectedAppointment = getSelectedAppointment();
 
         if (selectedAppointment == null) {
             showError("Edit Error", "Please select an appointment to edit.");
@@ -122,8 +187,7 @@ public class AppointmentListController extends BaseController {
 
     @FXML
     private void handleDeleteAppointment() {
-        AppointmentResponse selectedAppointment =
-                appointmentTable.getSelectionModel().getSelectedItem();
+        AppointmentResponse selectedAppointment = getSelectedAppointment();
 
         if (selectedAppointment == null) {
             showError("Delete Error", "Please select an appointment to delete.");
@@ -146,6 +210,7 @@ public class AppointmentListController extends BaseController {
     private void handleBackToDashboard(ActionEvent event) {
         AppointmentFormContext.clear();
         AppointmentDetailsContext.clear();
+        MedicalRecordContext.clear();
 
         changeScene(
                 event,
@@ -176,5 +241,9 @@ public class AppointmentListController extends BaseController {
                 FXCollections.observableArrayList(appointmentResponses);
 
         appointmentTable.setItems(observableAppointments);
+    }
+
+    private AppointmentResponse getSelectedAppointment() {
+        return appointmentTable.getSelectionModel().getSelectedItem();
     }
 }
