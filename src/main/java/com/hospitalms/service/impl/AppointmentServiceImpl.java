@@ -2,10 +2,11 @@ package com.hospitalms.service.impl;
 
 import com.hospitalms.dto.appointment.AppointmentCreateRequest;
 import com.hospitalms.dto.appointment.AppointmentUpdateRequest;
+import com.hospitalms.exception.ValidationException;
 import com.hospitalms.model.Appointment;
+import com.hospitalms.model.AppointmentStatus;
 import com.hospitalms.repository.AppointmentRepository;
 import com.hospitalms.service.AppointmentService;
-import com.hospitalms.exception.ValidationException;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 request.getAppointmentDate(),
                 request.getAppointmentTime(),
                 request.getReason(),
-                request.getStatus()
+                AppointmentStatus.SCHEDULED
         );
 
         return appointmentRepository.save(appointment);
@@ -40,6 +41,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     public Appointment updateAppointment(Long id, AppointmentUpdateRequest request) {
         Appointment existingAppointment = getAppointmentById(id);
 
+        validateStatusTransition(existingAppointment.getStatus(), request.getStatus());
         validateDoctorAvailabilityForUpdate(id, request);
 
         Appointment updatedAppointment = new Appointment(
@@ -104,6 +106,16 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         if (doctorAlreadyBooked) {
             throw new ValidationException("This doctor already has another appointment at this date and time.");
+        }
+    }
+
+    private void validateStatusTransition(AppointmentStatus currentStatus, AppointmentStatus newStatus) {
+        if (!currentStatus.canTransitionTo(newStatus)) {
+            throw new ValidationException(
+                    "This appointment is already "
+                            + currentStatus.getDisplayName()
+                            + " and cannot be changed anymore."
+            );
         }
     }
 }

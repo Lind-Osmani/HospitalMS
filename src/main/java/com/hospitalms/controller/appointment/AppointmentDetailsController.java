@@ -65,7 +65,7 @@ public class AppointmentDetailsController extends BaseController {
         doctorNameLabel.setText(appointment.getDoctorName());
         dateLabel.setText(appointment.getAppointmentDate().toString());
         timeLabel.setText(appointment.getAppointmentTime().toString());
-        statusLabel.setText(appointment.getStatus().name());
+        statusLabel.setText(appointment.getStatus().getDisplayName());
         reasonLabel.setText(appointment.getReason());
     }
 }
