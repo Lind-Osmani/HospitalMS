@@ -56,6 +56,8 @@ public class AppointmentListController extends BaseController {
 
     @FXML
     private void initialize() {
+        appointmentTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
         setupTableColumns();
         loadAppointments();
     }
