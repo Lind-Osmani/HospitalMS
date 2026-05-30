@@ -19,6 +19,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
+import com.hospitalms.core.navigation.PageTitles;
+import com.hospitalms.core.navigation.ViewPaths;
 
 import java.time.LocalTime;
 
@@ -238,8 +240,8 @@ public class AppointmentFormController extends BaseController {
     private void goBackToAppointmentList(ActionEvent event) {
         changeScene(
                 event,
-                "/com/hospitalms/fxml/appointment/appointment-list-view.fxml",
-                "Hospital Management System - Appointments"
+                ViewPaths.APPOINTMENT_LIST,
+                PageTitles.APPOINTMENTS
         );
     }
 }

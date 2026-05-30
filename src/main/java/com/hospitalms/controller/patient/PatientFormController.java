@@ -14,6 +14,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import com.hospitalms.core.navigation.PageTitles;
+import com.hospitalms.core.navigation.ViewPaths;
 
 public class PatientFormController extends BaseController {
 
@@ -80,8 +82,8 @@ public class PatientFormController extends BaseController {
 
         changeScene(
                 event,
-                "/com/hospitalms/fxml/patient/patient-list-view.fxml",
-                "Hospital Management System - Patients"
+                ViewPaths.PATIENT_LIST,
+                PageTitles.PATIENTS
         );
     }
 
@@ -177,8 +179,8 @@ public class PatientFormController extends BaseController {
     private void goBackToPatientList(ActionEvent event) {
         changeScene(
                 event,
-                "/com/hospitalms/fxml/patient/patient-list-view.fxml",
-                "Hospital Management System - Patients"
+                ViewPaths.PATIENT_LIST,
+                PageTitles.PATIENTS
         );
     }
 }

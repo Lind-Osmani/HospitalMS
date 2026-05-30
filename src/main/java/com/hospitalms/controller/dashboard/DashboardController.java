@@ -1,6 +1,8 @@
 package com.hospitalms.controller.dashboard;
 
 import com.hospitalms.core.controller.BaseController;
+import com.hospitalms.core.navigation.PageTitles;
+import com.hospitalms.core.navigation.ViewPaths;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
@@ -10,17 +12,17 @@ public class DashboardController extends BaseController {
     private void handlePatients(ActionEvent event) {
         changeScene(
                 event,
-                "/com/hospitalms/fxml/patient/patient-list-view.fxml",
-                "Hospital Management System - Patients"
+                ViewPaths.PATIENT_LIST,
+                PageTitles.PATIENTS
         );
     }
 
     @FXML
-    private void handleDoctors(ActionEvent event){
+    private void handleDoctors(ActionEvent event) {
         changeScene(
                 event,
-                "/com/hospitalms/fxml/doctor/doctor-list-view.fxml",
-                "Hospital Management System - Doctors"
+                ViewPaths.DOCTOR_LIST,
+                PageTitles.DOCTORS
         );
     }
 
@@ -28,8 +30,8 @@ public class DashboardController extends BaseController {
     private void handleAppointments(ActionEvent event) {
         changeScene(
                 event,
-                "/com/hospitalms/fxml/appointment/appointment-list-view.fxml",
-                "Hospital Management System - Appointments"
+                ViewPaths.APPOINTMENT_LIST,
+                PageTitles.APPOINTMENTS
         );
     }
 
@@ -37,8 +39,8 @@ public class DashboardController extends BaseController {
     private void handleLogout(ActionEvent event) {
         changeScene(
                 event,
-                "/com/hospitalms/fxml/auth/login-view.fxml",
-                "Hospital Management System - Login"
+                ViewPaths.LOGIN,
+                PageTitles.LOGIN
         );
     }
 }

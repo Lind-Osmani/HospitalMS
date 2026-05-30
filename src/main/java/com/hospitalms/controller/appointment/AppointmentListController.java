@@ -16,6 +16,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import com.hospitalms.config.AppointmentFormContext;
+import com.hospitalms.core.navigation.PageTitles;
+import com.hospitalms.core.navigation.ViewPaths;
 
 import java.util.List;
 
@@ -75,8 +77,8 @@ public class AppointmentListController extends BaseController {
 
         changeScene(
                 event,
-                "/com/hospitalms/fxml/appointment/appointment-form-view.fxml",
-                "Hospital Management System - Add Appointment"
+                ViewPaths.APPOINTMENT_FORM,
+                PageTitles.ADD_APPOINTMENT
         );
     }
 
@@ -94,8 +96,8 @@ public class AppointmentListController extends BaseController {
 
         changeScene(
                 event,
-                "/com/hospitalms/fxml/appointment/appointment-details-view.fxml",
-                "Hospital Management System - Appointment Details"
+                ViewPaths.APPOINTMENT_DETAILS,
+                PageTitles.APPOINTMENT_DETAILS
         );
     }
 
@@ -113,8 +115,8 @@ public class AppointmentListController extends BaseController {
 
         changeScene(
                 event,
-                "/com/hospitalms/fxml/appointment/appointment-form-view.fxml",
-                "Hospital Management System - Edit Appointment"
+                ViewPaths.APPOINTMENT_FORM,
+                PageTitles.EDIT_APPOINTMENT
         );
     }
 
@@ -142,12 +144,13 @@ public class AppointmentListController extends BaseController {
 
     @FXML
     private void handleBackToDashboard(ActionEvent event) {
+        AppointmentFormContext.clear();
         AppointmentDetailsContext.clear();
 
         changeScene(
                 event,
-                "/com/hospitalms/fxml/dashboard/dashboard-view.fxml",
-                "Hospital Management System - Dashboard"
+                ViewPaths.DASHBOARD,
+                PageTitles.DASHBOARD
         );
     }
 
