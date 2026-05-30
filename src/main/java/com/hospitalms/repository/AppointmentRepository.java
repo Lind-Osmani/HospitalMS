@@ -11,7 +11,12 @@ public interface AppointmentRepository extends CrudRepository<Appointment, Long>
 
     List<Appointment> search(String keyword);
 
-    boolean existsByDoctorAndDateTime(Long doctorId, LocalDate date, LocalTime time);
+    boolean existsByDoctorAndDateTime(Long doctorId, LocalDate appointmentDate, LocalTime appointmentTime);
 
-    boolean existsByDoctorAndDateTimeAndIdNot(Long doctorId, LocalDate date, LocalTime time, Long appointmentId);
+    boolean existsByDoctorAndDateTimeAndIdNot(
+            Long doctorId,
+            LocalDate appointmentDate,
+            LocalTime appointmentTime,
+            Long appointmentId
+    );
 }

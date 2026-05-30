@@ -14,6 +14,8 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class JdbcAppointmentRepository extends AbstractJdbcRepository implements AppointmentRepository {
 
@@ -176,7 +178,11 @@ public class JdbcAppointmentRepository extends AbstractJdbcRepository implements
     }
 
     @Override
-    public boolean existsByDoctorAndDateTime(Long doctorId, java.time.LocalDate date, java.time.LocalTime time) {
+    public boolean existsByDoctorAndDateTime(
+            Long doctorId,
+            LocalDate appointmentDate,
+            LocalTime appointmentTime
+    ) {
         String sql = """
             SELECT COUNT(*)
             FROM appointments
@@ -190,8 +196,8 @@ public class JdbcAppointmentRepository extends AbstractJdbcRepository implements
                 PreparedStatement statement = connection.prepareStatement(sql)
         ) {
             statement.setLong(1, doctorId);
-            statement.setDate(2, Date.valueOf(date));
-            statement.setTime(3, Time.valueOf(time));
+            statement.setDate(2, Date.valueOf(appointmentDate));
+            statement.setTime(3, Time.valueOf(appointmentTime));
 
             ResultSet resultSet = statement.executeQuery();
 
@@ -202,15 +208,15 @@ public class JdbcAppointmentRepository extends AbstractJdbcRepository implements
             return false;
 
         } catch (Exception e) {
-            throw new DatabaseException("Could not check doctor appointment availability.", e);
+            throw new DatabaseException("Could not check appointment conflict.", e);
         }
     }
 
     @Override
     public boolean existsByDoctorAndDateTimeAndIdNot(
             Long doctorId,
-            java.time.LocalDate date,
-            java.time.LocalTime time,
+            LocalDate appointmentDate,
+            LocalTime appointmentTime,
             Long appointmentId
     ) {
         String sql = """
@@ -227,8 +233,8 @@ public class JdbcAppointmentRepository extends AbstractJdbcRepository implements
                 PreparedStatement statement = connection.prepareStatement(sql)
         ) {
             statement.setLong(1, doctorId);
-            statement.setDate(2, Date.valueOf(date));
-            statement.setTime(3, Time.valueOf(time));
+            statement.setDate(2, Date.valueOf(appointmentDate));
+            statement.setTime(3, Time.valueOf(appointmentTime));
             statement.setLong(4, appointmentId);
 
             ResultSet resultSet = statement.executeQuery();
@@ -240,7 +246,7 @@ public class JdbcAppointmentRepository extends AbstractJdbcRepository implements
             return false;
 
         } catch (Exception e) {
-            throw new DatabaseException("Could not check doctor appointment availability for update.", e);
+            throw new DatabaseException("Could not check appointment conflict for update.", e);
         }
     }
 

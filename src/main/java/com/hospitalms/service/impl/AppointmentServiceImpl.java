@@ -5,6 +5,7 @@ import com.hospitalms.dto.appointment.AppointmentUpdateRequest;
 import com.hospitalms.model.Appointment;
 import com.hospitalms.repository.AppointmentRepository;
 import com.hospitalms.service.AppointmentService;
+import com.hospitalms.exception.ValidationException;
 
 import java.util.List;
 
@@ -18,6 +19,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public Appointment createAppointment(AppointmentCreateRequest request) {
+        validateDoctorAvailabilityForCreate(request);
+
         Appointment appointment = new Appointment(
                 null,
                 request.getPatientId(),
@@ -36,6 +39,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public Appointment updateAppointment(Long id, AppointmentUpdateRequest request) {
         Appointment existingAppointment = getAppointmentById(id);
+
+        validateDoctorAvailabilityForUpdate(id, request);
 
         Appointment updatedAppointment = new Appointment(
                 existingAppointment.getId(),
@@ -74,6 +79,31 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         if (!deleted) {
             throw new IllegalArgumentException("Appointment not found with ID: " + id);
+        }
+    }
+
+    private void validateDoctorAvailabilityForCreate(AppointmentCreateRequest request) {
+        boolean doctorAlreadyBooked = appointmentRepository.existsByDoctorAndDateTime(
+                request.getDoctorId(),
+                request.getAppointmentDate(),
+                request.getAppointmentTime()
+        );
+
+        if (doctorAlreadyBooked) {
+            throw new ValidationException("This doctor already has an appointment at this date and time.");
+        }
+    }
+
+    private void validateDoctorAvailabilityForUpdate(Long appointmentId, AppointmentUpdateRequest request) {
+        boolean doctorAlreadyBooked = appointmentRepository.existsByDoctorAndDateTimeAndIdNot(
+                request.getDoctorId(),
+                request.getAppointmentDate(),
+                request.getAppointmentTime(),
+                appointmentId
+        );
+
+        if (doctorAlreadyBooked) {
+            throw new ValidationException("This doctor already has another appointment at this date and time.");
         }
     }
 }
