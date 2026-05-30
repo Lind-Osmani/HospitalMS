@@ -1,1 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="750.0" prefWidth="1200.0"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.hospitalms.controller.medicalrecord.MedicalRecordDetailsController">
+
+    <children>
+        <VBox layoutX="220.0" layoutY="40.0" spacing="22.0" prefWidth="760.0">
+
+            <children>
+                <Label text="Medical Record Details"
+                       style="-fx-font-size: 28px; -fx-font-weight: bold;" />
+
+                <GridPane hgap="20.0" vgap="16.0">
+
+                    <children>
+                        <Label text="Patient:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                        <Label fx:id="patientNameLabel" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+
+                        <Label text="Doctor:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                        <Label fx:id="doctorNameLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+                        <Label text="Created At:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                        <Label fx:id="createdAtLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+
+                        <Label text="Diagnosis:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                        <Label fx:id="diagnosisLabel"
+                               wrapText="true"
+                               prefWidth="550.0"
+                               style="-fx-padding: 8; -fx-background-color: #f4f6f7; -fx-border-color: #d5d8dc;"
+                               GridPane.rowIndex="3"
+                               GridPane.columnIndex="1" />
+
+                        <Label text="Treatment:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+                        <Label fx:id="treatmentLabel"
+                               wrapText="true"
+                               prefWidth="550.0"
+                               style="-fx-padding: 8; -fx-background-color: #f4f6f7; -fx-border-color: #d5d8dc;"
+                               GridPane.rowIndex="4"
+                               GridPane.columnIndex="1" />
+
+                        <Label text="Prescription:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+                        <Label fx:id="prescriptionLabel"
+                               wrapText="true"
+                               prefWidth="550.0"
+                               style="-fx-padding: 8; -fx-background-color: #f4f6f7; -fx-border-color: #d5d8dc;"
+                               GridPane.rowIndex="5"
+                               GridPane.columnIndex="1" />
+
+                        <Label text="Notes:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+                        <Label fx:id="notesLabel"
+                               wrapText="true"
+                               prefWidth="550.0"
+                               style="-fx-padding: 8; -fx-background-color: #f4f6f7; -fx-border-color: #d5d8dc;"
+                               GridPane.rowIndex="6"
+                               GridPane.columnIndex="1" />
+                    </children>
+
+                </GridPane>
+
+                <HBox spacing="15.0">
+                    <children>
+                        <Button text="Back to Appointments"
+                                prefWidth="170.0"
+                                onAction="#handleBack" />
+                    </children>
+                </HBox>
+            </children>
+
+        </VBox>
+    </children>
+</AnchorPane>
